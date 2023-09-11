@@ -90,7 +90,7 @@ func main() {
 		if err != nil {
 			if triggerJobBuild && strings.Contains(err.Error(), "404") {
 				buildParams := ParseParams(params)
-				fmt.Printf("build job %s with params: %+v", jobName, params)
+				fmt.Printf("build job %s with params: %+v\n", jobName, buildParams)
 				_, err = job.InvokeSimple(ctx, buildParams)
 				if err != nil {
 					fmt.Println("invoke error", err.Error())

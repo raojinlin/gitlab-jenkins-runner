@@ -45,6 +45,10 @@ func ParseParams(params string) map[string]string {
 
 	for _, label := range labelArr {
 		param := strings.SplitN(label, "=", 2)
+		if len(param) < 2 {
+			continue
+		}
+
 		result[param[0]] = param[1]
 	}
 
@@ -85,7 +89,9 @@ func main() {
 
 		if err != nil {
 			if triggerJobBuild && strings.Contains(err.Error(), "404") {
-				_, err = job.InvokeSimple(ctx, ParseParams(params))
+				buildParams := ParseParams(params)
+				fmt.Printf("build job %s with params: %+v", jobName, params)
+				_, err = job.InvokeSimple(ctx, buildParams)
 				if err != nil {
 					fmt.Println("invoke error", err.Error())
 					os.Exit(2)

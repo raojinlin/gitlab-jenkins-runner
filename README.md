@@ -37,6 +37,42 @@ gitlab-jenkins-runner -base <your-jenkins-url> -job <job-name> -params PARAM1=Va
 gitlab-jenkins-runner -base https://your-jenkins-url.com -job my-build-job -params BRANCH=main,ENV=prod -user jenkinsuser -token myapitoken -build
 ```
 
+## 在 GitLab 流水线中使用
+
+这个章节将指导你如何在 GitLab CI/CD 流水线中集成和使用 `gitlab-jenkins-runner` 命令来触发 Jenkins 构建作业。
+
+### 步骤 1: 配置 GitLab 项目
+
+确保你的 GitLab 项目正确配置了 CI/CD 设置以及与 Jenkins 的连接。你需要在项目设置中添加 Jenkins 服务器的 URL、认证凭据等信息。请参考 GitLab 文档以了解如何配置 GitLab 项目以与 Jenkins 集成。
+
+### 步骤 2: 配置 GitLab CI/CD 流水线
+
+在你的 GitLab 项目中，打开 `.gitlab-ci.yml` 文件并添加一个新的阶段，以使用 `gitlab-jenkins-runner` 工具触发 Jenkins 构建。
+
+```yaml
+# .gitlab-ci.yml
+
+stages:
+  - trigger_jenkins_build
+
+trigger_jenkins_build:
+  stage: trigger_jenkins_build
+  script:
+    - gitlab-jenkins-runner -base https://your-jenkins-url.com -job my-build-job -params BRANCH=$CI_MERGE_REQUEST_SOURCE_BRANCH,ENV=prod,${CI_MERGE_REQUEST_LABELS} -user jenkinsuser -token myapitoken -build
+
+```
+
+### 步骤 4：创建一个merge_request
+创建一个merge_request
+
+### 步骤 5：为merge_request创建标签
+如果要想要Jenkins构建时使用参数，需要在merge request上设置label，label的格式如下：
+```
+PARAM_1=PARAM_VALUE_1
+```
+
+如：`env=PROD`
+
 ## 许可证
 
 本项目基于 MIT 许可证。有关详细信息，请参阅 [LICENSE.md](LICENSE.md)。

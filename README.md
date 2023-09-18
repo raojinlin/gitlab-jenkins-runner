@@ -1,6 +1,6 @@
 # GitLab Jenkins Runner
 
-GitLab Jenkins Runner 是一个用于在 GitLab CI/CD 流水线中触发 Jenkins 作业的命令行工具。它允许你轻松地将 GitLab 与 Jenkins 集成，以实现自动化构建和部署工作流程。
+GitLab Jenkins Runner 是一个用于在 GitLab CI/CD 流水线中触发 Jenkins 作业的命令行工具。它允许你轻松地将 GitLab 与 Jenkins 集成，实时输出Jenkins的构建日志，以实现自动化构建和部署工作流程。
 
 ## 安装
 
@@ -9,8 +9,11 @@ GitLab Jenkins Runner 是一个用于在 GitLab CI/CD 流水线中触发 Jenkins
 使用以下命令获取和构建 `gitlab-jenkins-runner` 工具：
 
 ```bash
-go install github.com/yourusername/gitlab-jenkins-runner
+$ go install github.com/raojinlin/gitlab-jenkins-runner@latest
 ```
+
+或者在[Releases](https://github.com/raojinlin/gitlab-jenkins-runner/releases)页面下载已经编译好的可执行文件。
+
 
 ## 使用
 

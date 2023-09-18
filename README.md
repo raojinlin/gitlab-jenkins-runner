@@ -4,9 +4,9 @@ GitLab Jenkins Runner 是一个用于在 GitLab CI/CD 流水线中触发 Jenkins
 
 ## 安装
 
-在开始之前，请确保你的系统上已安装了 Go 编程语言。
+在开始之前，请确保你的系统上已安装了Go(1.19及以上)。
 
-使用以下命令获取和构建 `gitlab-jenkins-runner` 工具：
+使用以下命令获取和构建 `gitlab-jenkins-runner`命令：
 
 ```bash
 $ go install github.com/raojinlin/gitlab-jenkins-runner@latest
@@ -75,10 +75,6 @@ PARAM_1=PARAM_VALUE_1
 ```
 
 如：`env=PROD`
-
-## 许可证
-
-本项目基于 MIT 许可证。有关详细信息，请参阅 [LICENSE.md](LICENSE.md)。
 
 ## 支持
 

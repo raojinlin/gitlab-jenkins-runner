@@ -64,7 +64,7 @@ func main() {
 	flag.StringVar(&jenkinsUser, "user", jenkinsUser, "Jenkins user")
 	flag.StringVar(&jenkinsToken, "token", jenkinsUser, "Jenkins user token")
 	flag.BoolVar(&triggerJobBuild, "build", triggerJobBuild, "Trigger jenkins job build")
-	flag.BoolVar(&parseParamsFromMr, "parse-from-mr", "Parse jenkins build params from merge_request description")
+	flag.BoolVar(&parseParamsFromMr, "parse-from-mr", parseParamsFromMr, "Parse jenkins build params from merge_request description")
 	flag.Parse()
 
 	ctx := context.Background()

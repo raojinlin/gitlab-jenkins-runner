@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,12 +13,13 @@ import (
 )
 
 var (
-	triggerJobBuild bool
-	baseUrl         string
-	params          string
-	jobName         string
-	jenkinsUser     string
-	jenkinsToken    string
+	triggerJobBuild   bool
+	parseParamsFromMr bool
+	baseUrl           string
+	params            string
+	jobName           string
+	jenkinsUser       string
+	jenkinsToken      string
 )
 
 func waitJobStart(job *gojenkins.Job) {
@@ -62,6 +64,7 @@ func main() {
 	flag.StringVar(&jenkinsUser, "user", jenkinsUser, "Jenkins user")
 	flag.StringVar(&jenkinsToken, "token", jenkinsUser, "Jenkins user token")
 	flag.BoolVar(&triggerJobBuild, "build", triggerJobBuild, "Trigger jenkins job build")
+	flag.BoolVar(&parseParamsFromMr, "parse-from-mr", parseParamsFromMr, "Parse jenkins build params from merge_request description")
 	flag.Parse()
 
 	ctx := context.Background()
@@ -90,6 +93,30 @@ func main() {
 		if err != nil {
 			if triggerJobBuild && strings.Contains(err.Error(), "404") {
 				buildParams := ParseParams(params)
+				if parseParamsFromMr {
+					// merge request internal id
+					mergeRequestIDStr := os.Getenv("CI_MERGE_REQUEST_IID")
+					mergeRequestID, err := strconv.ParseInt(mergeRequestIDStr, 10, 64)
+					if err == nil {
+						token := os.Getenv("CI_GITLAB_ACCESS_TOKEN")
+						if token == "" {
+							fmt.Println("error: empty gitlab access token")
+							os.Exit(1)
+						}
+
+						baseUrl := os.Getenv("CI_SERVER_URL")
+						project := os.Getenv("CI_MERGE_REQUEST_PROJECT_PATH")
+						if mergeRequest, err := getMergeRequest(baseUrl, token, project, int(mergeRequestID)); err == nil {
+							params := parseParamsFromDesc(mergeRequest.Description)
+							for param, paramVal := range params {
+								buildParams[param] = paramVal
+							}
+						}
+					} else {
+						fmt.Println("parse merge request internal id error", err)
+						os.Exit(1)
+					}
+				}
 				fmt.Printf("build job %s with params: %+v\n", jobName, buildParams)
 				_, err = job.InvokeSimple(ctx, buildParams)
 				if err != nil {

@@ -32,6 +32,13 @@ gitlab-jenkins-runner -base <your-jenkins-url> -job <job-name> -params PARAM1=Va
 - `-token <jenkins-token>`：Jenkins 用户令牌或密码。
 - `-build`：触发 Jenkins 作业的构建。
 
+### 环境变量
+
+- `CI_MERGE_REQUEST_IID`: 合并请求的内部ID
+- `CI_SERVER_URL`: GitLab的服务器地址，如：`http://gitlab.example.com`
+- `CI_MERGE_REQUEST_PROJECT_PATH`: 项目路径
+- `CI_GITLAB_ACCESS_TOKEN`: GitLab访问秘钥，用于获取合并请求`CI_GITLAB_ACCESS_TOKEN`的详细信息
+
 ## 示例
 
 以下是一个示例命令，演示如何使用 `gitlab-jenkins-runner` 工具：
@@ -69,12 +76,25 @@ trigger_jenkins_build:
 创建一个merge_request
 
 ### 步骤 5：为merge_request创建标签
-如果要想要Jenkins构建时使用参数，需要在merge request上设置label，label的格式如下：
+如果要想要Jenkins构建时使用参数，有两种方式：
+
+1. 在merge request上设置label，label的格式如下：
 ```
 PARAM_1=PARAM_VALUE_1
 ```
 
 如：`env=PROD`
+
+2. 编辑合并请求的描述，在描述中加入代码块，遵循以下格式
+````markdown
+合并请求描述文本。。。。
+
+下面的代码块会被传递到Jenkins
+```env
+SERVER_A_HOST=x.x.x.x
+SERVER_A_PORT=80
+```
+````
 
 ## 支持
 

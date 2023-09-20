@@ -76,12 +76,25 @@ trigger_jenkins_build:
 创建一个merge_request
 
 ### 步骤 5：为merge_request创建标签
-如果要想要Jenkins构建时使用参数，需要在merge request上设置label，label的格式如下：
+如果要想要Jenkins构建时使用参数，有两种方式：
+
+1. 在merge request上设置label，label的格式如下：
 ```
 PARAM_1=PARAM_VALUE_1
 ```
 
 如：`env=PROD`
+
+2. 编辑合并请求的描述，在描述中加入代码块，遵循以下格式
+````markdown
+合并请求描述文本。。。。
+
+下面的代码块会被传递到Jenkins
+```env
+SERVER_A_HOST=x.x.x.x
+SERVER_A_PORT=80
+```
+````
 
 ## 支持
 

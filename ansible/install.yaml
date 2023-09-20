@@ -17,7 +17,7 @@
   
   - name: Install
     shell:
-      cmd: gzip -d gitlab-jenkins-runner.gz && install -m 0755 gitlab-jenkins-runner /usr/bin/gitlab-jenkins-runner
+      cmd: gzip -f -d gitlab-jenkins-runner.gz && install -m 0755 gitlab-jenkins-runner /usr/bin/gitlab-jenkins-runner && rm gitlab-jenkins-runner
       chdir: /tmp
   
   - name: Check installed

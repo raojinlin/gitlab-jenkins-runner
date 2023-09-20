@@ -32,6 +32,13 @@ gitlab-jenkins-runner -base <your-jenkins-url> -job <job-name> -params PARAM1=Va
 - `-token <jenkins-token>`：Jenkins 用户令牌或密码。
 - `-build`：触发 Jenkins 作业的构建。
 
+### 环境变量
+
+- `CI_MERGE_REQUEST_IID`: 合并请求的内部ID
+- `CI_SERVER_URL`: GitLab的服务器地址，如：`http://gitlab.example.com`
+- `CI_MERGE_REQUEST_PROJECT_PATH`: 项目路径
+- `CI_GITLAB_ACCESS_TOKEN`: GitLab访问秘钥，用于获取合并请求`CI_GITLAB_ACCESS_TOKEN`的详细信息
+
 ## 示例
 
 以下是一个示例命令，演示如何使用 `gitlab-jenkins-runner` 工具：

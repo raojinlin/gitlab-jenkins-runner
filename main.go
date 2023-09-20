@@ -95,17 +95,26 @@ func main() {
 				buildParams := ParseParams(params)
 				if parseParamsFromMr {
 					// merge request internal id
-					mergeRequestIDStr := os.Getenv("GITLAB_MERGE_REQUEST_ID")
+					mergeRequestIDStr := os.Getenv("CI_MERGE_REQUEST_IID")
 					mergeRequestID, err := strconv.ParseInt(mergeRequestIDStr, 10, 64)
 					if err == nil {
-						if mergeRequest, err := getMergeRequest(os.Getenv("GITLAB_BASE_URL"), os.Getenv("GITLAB_ACCESS_TOKEN"), os.Getenv("GITLAB_PROJECT"), int(mergeRequestID)); err == nil {
+						token := os.Getenv("CI_GITLAB_ACCESS_TOKEN")
+						if token == "" {
+							fmt.Println("error: empty gitlab access token")
+							os.Exit(1)
+						}
+
+						baseUrl := os.Getenv("CI_SERVER_URL")
+						project := os.Getenv("CI_MERGE_REQUEST_PROJECT_PATH")
+						if mergeRequest, err := getMergeRequest(baseUrl, token, project, int(mergeRequestID)); err == nil {
 							params := parseParamsFromDesc(mergeRequest.Description)
 							for param, paramVal := range params {
 								buildParams[param] = paramVal
 							}
 						}
 					} else {
-						fmt.Println("parse merge request id error", err)
+						fmt.Println("parse merge request internal id error", err)
+						os.Exit(1)
 					}
 				}
 				fmt.Printf("build job %s with params: %+v\n", jobName, buildParams)

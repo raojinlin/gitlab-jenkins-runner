@@ -1,0 +1,24 @@
+- name: Build gitlab-jenkins-runner
+  hosts: localhost
+  tasks:
+  - name: Build binary
+    shell:
+      chdir: ../
+      cmd: make all
+
+- name: Install to server
+  hosts: '{{target}}'
+  gather_facts: false
+  tasks:
+  - name: Copy to server
+    copy:
+      src: ../bin/gitlab-jenkins-runner.gz
+      dest: /tmp
+  
+  - name: Install
+    shell:
+      cmd: gzip -d gitlab-jenkins-runner.gz && install -m 0755 gitlab-jenkins-runner /usr/bin/gitlab-jenkins-runner
+      chdir: /tmp
+  
+  - name: Check installed
+    shell: gitlab-jenkins-runner -h

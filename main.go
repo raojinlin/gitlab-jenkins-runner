@@ -104,6 +104,8 @@ func main() {
 								buildParams[param] = paramVal
 							}
 						}
+					} else {
+						fmt.Println("parse merge request id error", err)
 					}
 				}
 				fmt.Printf("build job %s with params: %+v\n", jobName, buildParams)
